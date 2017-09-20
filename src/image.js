@@ -10,41 +10,31 @@ const s3 = new aws.S3({
 
 const supportedImageExt = ['png', 'jpg']
 
+/**
+ * S3에 이미지를 업로드합니다.
+ * @param {Buffer} buffer
+ * @returns {Promise}
+ */
 function uploadImageFile(buffer) {
   return new Promise((resolve, reject) => {
-    const {ext, mime} = fileType(buffer)
-    if (!supportedImageExt.includes(ext)) {
-      // 함수를 바로 끝내기 위해 return
-      return reject(new Error('지원하지 않는 파일 형식입니다.'))
-    }
-    s3.upload({
-      ACL: 'public-read',
-      Body: buffer,
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: `${uuid.v4()}.${ext}`,
-      ContentDisposition: 'inline',
-      ContentType: mime
-    }, (err, data) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(data.Location)
-      }
-    })
+    // 파일 타입 체크해서 png, jpg가 아니면 에러 발생
+
+    // s3에 업로드 후 Location 반환
+
   })
 }
 
 /**
- * 사용자로부터 받은 이미지 파일을 S3에 업로드합니다.
+ * 사용자로부터 받은 이미지 파일의 크기를 검사한 후 S3에 업로드합니다.
  * @param file - multer 파일 객체 https://www.npmjs.com/package/multer#file-information
+ * @returns {Promise}
  */
 function uploadOriginalFile(file) {
   return new Promise((resolve, reject) => {
-    if (file.size > 1024 * 1024) {
-      // 1MB 보다 크면 에러
-      return reject(new Error('파일 크기가 1MB를 초과했습니다.'))
-    }
-    resolve(uploadImageFile(file.buffer))
+    // 1MB 보다 크면 에러 발생
+
+    // 이미지 업로드
+
   })
 }
 
@@ -56,15 +46,7 @@ function uploadOriginalFile(file) {
  */
 function createThumbnailJob(queue, id) {
   return new Promise((resolve, reject) => {
-    queue.create('thumbnail', {id})
-      .removeOnComplete(true)
-      .save(err => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
+
   })
 }
 

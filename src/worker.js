@@ -10,24 +10,9 @@ const queue = kue.createQueue()
 
 queue.process('thumbnail', (job, done) => {
   const {id} = job.data
-  query.getImageEntryById(id)
-    .then(imageEntry => {
-      return axios.get(imageEntry.original_url, {
-        responseType: 'arraybuffer'
-      }).then(res => {
-        return sharp(res.data)
-          .resize(200, 200)
-          .crop(sharp.gravity.center)
-          .toBuffer()
-      }).then(buffer => {
-        return image.uploadImageFile(buffer)
-      }).then(location => {
-        return query.updateThumbnailUrlByid(id, location)
-      }).then(() => {
-        console.log('done')
-        done()
-      }).catch(err => {
-        done(err)
-      })
-    })
+  // 이미지 항목 정보를 데이터베이스에서 가져온 후
+  // 원본 이미지 다운로드
+  // 썸네일 생성
+  // 썸네일 업로드
+  // 이미지 항목의 썸네일 URL 수정
 })

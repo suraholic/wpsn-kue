@@ -1,8 +1,10 @@
 const knex = require('./knex')
 
 module.exports = {
-  getImageEntries() {
+  getCompleteImageEntries() {
     return knex('image_entry')
+      .whereNotNull('thumbnail_url')
+      .orderBy('id', 'desc')
   },
   createImageEntry({original_url, thumbnail_url, title, description}) {
     return knex('image_entry')
