@@ -87,7 +87,7 @@ rpush mylist 1
 rpush mylist 2 3 4 5
 
 // 범위 가져오기
-lrange 0 2
+lrange mylist 0 2
 
 // 리스트 왼쪽에 요소 추가
 lpush mylist 6 7 8 9
@@ -178,7 +178,7 @@ const queue = kue.createQueue({
 
 // 작업을 동시에 10개까지 실행
 queue.process('make-thumbnail', 10, (job, done) => {
-  processImage(job.imageUrl, job.type)
+  processImage(job.data.imageUrl, job.data.type)
     .then(() => {
       done()
     })
